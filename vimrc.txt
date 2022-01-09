@@ -1,0 +1,154 @@
+" YAML stuff
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" Don't try to be vi compatible
+set nocompatible
+
+" Auto update
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Vim-Plug
+call plug#begin()
+Plug 'junegunn/vim-easy-align'
+
+Plug 'srcery-colors/srcery-vim'
+
+" Any valid git URL is allowed
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
+" Using a non-default branch
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+Plug 'fatih/vim-go', { 'tag': '*' }
+
+" Plugin options
+Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+" Unmanaged plugin (manually installed and updated)
+Plug '~/my-prototype-plugin'
+
+" Initialize plugin system
+call plug#end()
+
+" Turn on syntax highlighting
+syntax on
+
+" For plugins to load correctly
+filetype plugin indent on
+
+" TODO: Pick a leader key
+" let mapleader = ","
+
+" Security
+set modelines=0
+
+" Show line numbers
+set number relativenumber
+
+" Show file stats
+set ruler
+
+" Blink cursor on error instead of beeping (grr)
+set visualbell
+
+" Encoding
+set encoding=utf-8
+
+" Whitespace
+set wrap
+set textwidth=79
+set formatoptions=tcqrn1
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set noshiftround
+
+" Cursor motion
+set scrolloff=3
+set backspace=indent,eol,start
+set matchpairs+=<:> " use % to jump between pairs
+runtime! macros/matchit.vim
+
+" Allow hidden buffers
+set hidden
+
+" Rendering
+set ttyfast
+
+" Status bar
+set laststatus=2
+
+" Last line
+set showmode
+set showcmd
+
+" Searching
+nnoremap / /\v
+vnoremap / /\v
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+
+" Turn on the Wild menu
+set wildmenu
+
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" For regular expressions turn magic on
+set magic
+
+" Enable 256 colors palette in Gnome Terminal
+if $COLORTERM == 'gnome-terminal'
+    set t_Co=256
+endif
+
+try
+    colorscheme srcery
+catch
+endtry
+
+set background=dark
+
+set statusline=\ %f%m%r%h%w\ %=%({%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}%)\ %([%l,%v][%p%%]\ %)
+
+set foldenable          " enable folding
+set foldlevelstart=10   " open most folds by default
+set foldnestmax=10      " 10 nested fold max
+" space open/closes folds
+nnoremap <space> za
+set foldmethod=indent   " fold based on indent level
+" move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+" jj is escape
+inoremap jj <esc>
